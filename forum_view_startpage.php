@@ -54,7 +54,7 @@
         }
 
         .modal-window {
-            width:450px; height:350px;
+            width:450px; height:300px;
             border:1px solid black;
             display:none;
             background-color:White;
@@ -171,6 +171,25 @@
             <br>
             <input id='signin-cancel' type='button' value='Cancel' style='margin:10px; position:absolute; left:0; bottom:0'>
             <input id='signin-submit' type='submit' value='Submit' style='margin:10px; position:absolute; right:0; bottom:0'>
+        </form>
+    </div>
+
+    <div id='modal-signup' class='modal-window'>
+        <h2 style='text-align:center'>Register</h2>
+        <br>
+        <form method='POST' action='forum_controller.php'>
+            <input type='hidden' name='page' value='StartPage'>
+            <input type='hidden' name='command' value='SignUp'>
+            <label class='modal-startpage' for='signup-username'>Username: </label>
+            <input id='signup-username' type='text' name='username' required> 
+            <span id='error-msg-signup-username'><?php if (!empty($error_msg_username)) echo $error_msg_username; ?></span>
+            <br>
+            <label class='modal-startpage' for='signup-password'>Password: </label>
+            <input id='signup-password' type='password' name='password' required><br>
+            <label class='modal-startpage' for='signup-password'>Email: </label>
+            <input id='signup-email' type='text' name='email' required><br>
+            <input id='signup-cancel' type='button' value='Cancel' style='margin:10px; position:absolute; left:0; bottom:0'>
+            <input id='signup-submit' type='submit' value='Submit' style='margin:10px; position:absolute; right:0; bottom:0'>
         </form>
     </div>
 
