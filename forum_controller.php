@@ -21,7 +21,7 @@ if ($_POST['page'] == 'StartPage')
                 session_start();
                 $_SESSION['signedin'] = 'YES';
                 $_SESSION['username'] = $_POST['username'];
-                //include('w7_view_mainpage.php');
+                include('forum_view_mainpage.php');
             } 
             else {
                 $display_modal_window = 'signin';  // It will display the start page with the SignIn box.
@@ -29,7 +29,7 @@ if ($_POST['page'] == 'StartPage')
                 $error_msg_username = '* Wrong username, or';
                 $error_msg_password = '* Wrong password'; // Set an error message into a variable.
                                                         // This variable will used in the form in 'view_startpage.php'.
-                include('w7_view_startpage.php');
+                include('forum_view_startpage.php');
             }
             exit();
             break;

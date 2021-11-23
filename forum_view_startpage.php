@@ -197,12 +197,12 @@
 </html>
 
 <script>
-  /* <?php
+   <?php
         if ($display_modal_window == 'signin')
             echo 'show_signin();';
         else if ($display_modal_window == 'signup')
             echo 'show_signup();';
-    ?>*/
+    ?>
     
     function show_signin() {
         document.getElementById("blanket").style.display = "block";
