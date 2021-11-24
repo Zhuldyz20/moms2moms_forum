@@ -63,7 +63,20 @@
             padding:20px;
             z-index:999;
         }
+       .container {
+           position: relative;
+           text-align: center;
+           color: white;
+           top: 0; left:0; right =0;
+           margin:auto;
+        }
 
+      .centered {
+       position: absolute;
+       top: 50%;
+       left: 50%;
+       transform: translate(-50%, -50%);
+}
         
 
 </style>
@@ -110,10 +123,33 @@
   </div>
 </nav>
 
+
+<div class="container">
+
+<div class="mySlides">
+  
+  <img src="media\mom2.jpg" style="width:100%">
+  <div class="centered">We connect</div>
+</div>
+
+<div class="mySlides">
+ 
+  <img src="media\mom1.jpg" style="width:100%">
+  <div class="centered">We support</div>
+</div>
+
+<div class="mySlides">
+    <img src="media\mom3.jpg" style="width:100%">
+  <div class="centered">We educate</div>
+</div>
+
+</div>
+
 <div id='layout-main'>
 	
         <div id='layout-main-left'>
             <div id='content-left' style='position:absolute'>
+
             <h1 style='margin-left: 50px;'>Content1 </h1>
                 <br>
             </div>
@@ -158,7 +194,7 @@
     <div id='modal-signin' class='modal-window' style='display: relative'>
         <h2 style='text-align:center'>Sign in to MomsToMoms Forum</h2>
         <br>
-        <form method='POST' action='forum_controller.php'>
+        <form method='post' action='forum_controller.php'>
             <input type='hidden' name='page' value='StartPage'>
             <input type='hidden' name='command' value='SignIn'>
             <label class='modal-startpage' for='signin-username'>Username: </label>
@@ -171,6 +207,10 @@
             <br>
             <input id='signin-cancel' type='button' value='Cancel' style='margin:10px; position:absolute; left:0; bottom:0'>
             <input id='signin-submit' type='submit' value='Submit' style='margin:10px; position:absolute; right:0; bottom:0'>
+            <a href="javascript:yourfunction();"> Haven't register?</a>
+            
+                         
+	    
         </form>
     </div>
 
@@ -195,15 +235,39 @@
 
 </body>
 </html>
-
+<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
 <script>
-   <?php
+
+var slideIndex = 0;
+showSlides();
+
+function showSlides() {
+  var i;
+  var slides = document.getElementsByClassName("mySlides");
+  for (i = 0; i < slides.length; i++) {
+    slides[i].style.display = "none";
+  }
+  slideIndex++;
+  if (slideIndex > slides.length) {slideIndex = 1}
+  slides[slideIndex-1].style.display = "block";
+  setTimeout(showSlides, 2000); // Change image every 2 seconds
+}
+
+
+  /* <?php
         if ($display_modal_window == 'signin')
             echo 'show_signin();';
         else if ($display_modal_window == 'signup')
             echo 'show_signup();';
-    ?>
-    
+    ?>*/
+    function yourfunction(){
+	document.getElementById("modal-signin").style.display = "none";
+	document.getElementById("blanket").style.display = "block";
+        document.getElementById("modal-signup").style.display = "block";
+
+
+
+}  
     function show_signin() {
         document.getElementById("blanket").style.display = "block";
         document.getElementById("modal-signin").style.display = "block";
