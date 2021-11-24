@@ -113,9 +113,9 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
         </a>
         <div class="dropdown-menu float-right" style="right: 0; left: auto;" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Dashboard</a>
           <a class="dropdown-item" href="#">Edit Profile</a>
-          <a class="dropdown-item" href="#">Log Out</a>
+          <a class="dropdown-item" id = 'sign_out'>Log Out</a>
+          <a class="dropdown-item" id = "delete-profile">Delete Profile</a>
         </div>
       </li>   
     </ul>
@@ -173,7 +173,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
 </div>
         <div id = 'e3-result-pane'>  </div>
-            <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
+        <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
 		<input type='hidden' name='page' value='MainPage'>
         	<input type='hidden' name='command' value='SignOut'>
           </form>	
@@ -263,15 +263,21 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
 <script>
 
+     document.getElementById('sign_out').addEventListener('click', function() {
+       document.getElementById('e1-form').submit();
+        });
+/*
+        $('#delete-profile').click(function() { 
+            //$(this).parent().parent().remove();
+            var url = "forum_controller.php";
+            var query = {page: "MainPage", command: "DeleteProfile", id: $_POST['Id'];};
+            $.post(url, query,function(data) {
 
-    
-
-     //document.getElementById('sign_out').addEventListener('click', function() {
-      //  document.getElementById('e1-form').submit();
-       //  });
-       function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-}
+                document.getElementById('e1-form').submit();
+                   
+                 });
+        });*/
+ 
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(e) {
@@ -359,7 +365,5 @@ var url = "forum_controller.php";
            
 
     });
-
-
 
     </script>

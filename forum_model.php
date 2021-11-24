@@ -72,3 +72,10 @@ function SearchQuestions($term){
 
 }
 
+function deleteProfile($id){
+    global $conn;
+    $sql = "delete from ForumUsers where Id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    return $result;
+
+}

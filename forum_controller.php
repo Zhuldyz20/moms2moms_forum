@@ -69,7 +69,7 @@ session_start();
             session_unset();
             session_destroy();
             $display_modal_window = 'none';
-            include(forum_view_startpage.php);
+            include('forum_view_startpage.php');
             exit();
 
         case 'PostAQuestion':
@@ -87,6 +87,16 @@ session_start();
         case 'SearchQuestions':
             
             echo json_encode(SearchQuestions($_POST['term']));
+            exit();
+        
+        case 'DeleteProfile' :
+            $id = $_POST['Id'];
+            $result = deleteProfile($id);
+            //echo "<script>alert('Profile deleted succesfully!'); </script>";
+            $display_modal_window = 'none';
+            include('forum_view_startpage.php');
+            exit();
+            break;
        
     }
 } 
