@@ -83,6 +83,8 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
             padding:20px;
             z-index:999;
         }
+        
+
 
         
 
@@ -113,7 +115,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
         </a>
         <div class="dropdown-menu float-right" style="right: 0; left: auto;" aria-labelledby="navbarDropdownMenuLink">
-          <a class="dropdown-item" href="#">Edit Profile</a>
+          <a class="dropdown-item" id = "edit-profile">Edit Profile</a>
           <a class="dropdown-item" id = 'sign_out'>Log Out</a>
           <a class="dropdown-item" id = "delete-profile">Delete Profile</a>
         </div>
@@ -177,6 +179,48 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 		<input type='hidden' name='page' value='MainPage'>
         	<input type='hidden' name='command' value='SignOut'>
           </form>	
+
+          <div id='blanket'>
+          </div>
+          <div id='modal-delete' class='modal-window' style='display: relative'>
+        <h2 style='text-align:center'>Delete your profile</h2>
+        <br>
+        <form method='post' action='forum_controller.php'>
+            <input type='hidden' name='page' value='MainPage'>
+            <input type='hidden' name='command' value='DeleteProfile'>
+            <label class='modal-startpage' for='delete-username'>Username: </label>
+            <input id='signin-username' type='text' name='username' required> 
+            <span id='error-msg-delete-username'><?php if (!empty($error_msg_username)) echo $error_msg_username; // Display error message if there is ?></span>
+            <br><br>
+            <label class='modal-startpage' for='delete-password'>Password: </label>
+            <input id='signin-password' type='password' name='password' required>
+            <span id='error-msg-delete-password'><?php if (!empty($error_msg_password)) echo $error_msg_password; ?></span>
+            <br>
+            <input id='signin-cancel' type='button' value='Cancel' style='margin:10px; position:absolute; left:0; bottom:0'>
+            <input id='signin-submit' type='submit' value='Delete' style='margin:10px; position:absolute; right:0; bottom:0'>
+            
+        </form>
+    </div>
+
+    <div id='modal-edit' class='modal-window' style='display: relative'>
+        <h2 style='text-align:center'>Edit your profile</h2>
+        <br>
+        <form method='POST' action='forum_controller.php'>
+            <input type='hidden' name='page' value='MainPage'>
+            <input type='hidden' name='command' value='EditProfile'>
+            <label class='modal-mainpage' for='edit-username'>Username: </label>
+            <input id='edit-username' type='text' name='username' required> 
+            
+            <br>
+            <label class='modal-mainpage' for='edit-password'>Password: </label>
+            <input id='edit-password' type='password' name='password' required><br>
+            <label class='modal-mainpage' for='edit-email'>Email: </label>
+            <input id='edit-email' type='text' name='email' required><br>
+            <input id='edit-cancel' type='button' value='Cancel' style='margin:10px; position:absolute; left:0; bottom:0'>
+            <input id='edit-submit' type='submit' value='Submit' style='margin:10px; position:absolute; right:0; bottom:0'>
+        </form>
+    </div>
+	
 		
 
         </div> 
@@ -214,11 +258,10 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
         <br>
 </div>
 
-<div id='blanket'>
-    </div>
 
 
 
+<!--
     <div id='modal-q' class='modal-window'>
         <h2 style='text-align:center'>Post a question</h2>
 
@@ -237,7 +280,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 </form>
 
 
-    </div>
+    </div>-->
 
 
 
@@ -266,6 +309,23 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
      document.getElementById('sign_out').addEventListener('click', function() {
        document.getElementById('e1-form').submit();
         });
+
+        document.getElementById("delete-profile").addEventListener("click", function() {
+        document.getElementById("blanket").style.display = "block";
+        document.getElementById("modal-delete").style.display = "block";
+    });
+    
+    document.getElementById("edit-profile").addEventListener("click", function() {
+        document.getElementById("blanket").style.display = "block";
+        document.getElementById("modal-edit").style.display = "block";
+    });
+    
+    document.getElementById("signin-cancel").addEventListener("click", function() {
+        document.getElementById("blanket").style.display = "none";
+        document.getElementById("modal-signin").style.display = "none";
+        document.getElementById("modal-signup").style.display = "none";
+        delete_error_messages();
+    });
 /*
         $('#delete-profile').click(function() { 
             //$(this).parent().parent().remove();

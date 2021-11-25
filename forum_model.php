@@ -51,10 +51,11 @@ function getUserId($u) {
 }
 
 
-function  PostAQuestion($q,$uid,$t){
+function  postAQuestion($q,$u){
  global $conn;
+ $uid = getUserId($u);
     $current_date = date("Ymd"); 
-    $sql = "insert into ForumQuestions values (NULL, '$q', $uid, '$t') ";  
+    $sql = "insert into ForumQuestions values (NULL, '$q', $uid, $current_date ) ";  
     $result = mysqli_query($conn, $sql);
     return $result;        
 }
@@ -72,10 +73,32 @@ function SearchQuestions($term){
 
 }
 
-function deleteProfile($id){
+function deleteProfile($u, $p){
     global $conn;
-    $sql = "delete from ForumUsers where Id = '$id'";
+    $sql = "delete from ForumUsers where Username = '$u' and Password = '$p'";
     $result = mysqli_query($conn, $sql);
     return $result;
+    if (mysql_affected_rows() == 1)
+      return true;
+    else 
+       return false;
 
 }
+
+function editProfile ($u, $p, $e){
+    global $conn;
+    $id = getUserId($u);
+    $sql = "select * from ForumUsers where Id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    $row = mysqli_fetch_assoc($result);
+
+    
+    if($row['Id'] == $id){
+        $sql2 = "update ForumUsers set Username = '$u', Password = '$p', Email = '$e' where Id = '$id'";
+        $result2 = mysqli_query($conn, $sql2);
+        return $result2;
+
+    }
+}
+
+?>

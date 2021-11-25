@@ -90,13 +90,41 @@ session_start();
             exit();
         
         case 'DeleteProfile' :
-            $id = $_POST['Id'];
-            $result = deleteProfile($id);
-            //echo "<script>alert('Profile deleted succesfully!'); </script>";
-            $display_modal_window = 'none';
-            include('forum_view_startpage.php');
+            if (deleteProfile($_POST['username'], $_POST['password'])) 
+            {
+                
+                //$_SESSION['signedin'] = 'YES';
+                //$_SESSION['username'] = $username;
+                $display_modal_window = 'none';
+                include('forum_view_startpage.php');
+                exit();
+            } 
+            else {
+                $error_msg_username = '* Wrong username, or';
+                $error_msg_password = '* Wrong password'; // Set an error message into a variable.
+                $display_modal_window = 'DeleteProfile';                                       // This variable will used in the form in 'view_startpage.php'.
+                include('forum_view_mainpage.php');
+            }
             exit();
             break;
+
+        case 'EditProfile' :
+            
+            $username = $_POST['username'];
+            $password = $_POST['password'];
+            $email = $_POST['email'];
+
+            if(editProfile($username, $password, $email)) {
+                $display_modal_window = 'none';
+                include('forum_view_mainpage.php');
+                exit();
+            }
+            else {
+                $display_modal_window = 'EditProfile';
+                include('forum_view_mainpage.php');
+                exit();
+
+            }
        
     }
 } 
