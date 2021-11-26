@@ -50,14 +50,39 @@ function getUserId($u) {
 
 }
 
+function getTopicId($t, $u) {
+    global $conn;
+    $sql = "select * from ForumTopic where Title = '$t' and Topic_Owner = '$u'";  
+     $result = mysqli_query($conn, $sql);
+     if (mysqli_num_rows($result) > 0)
+     {
+        $row = mysqli_fetch_assoc($result);
+        return $row['Topic_Id'];
+     }
+     else 
+     {
+       return -1;
+        }
+ 
+}
 
-function  postAQuestion($q,$u){
+
+function  insertNewTopic($t, $u){
  global $conn;
- $uid = getUserId($u);
+ 
     $current_date = date("Ymd"); 
-    $sql = "insert into ForumQuestions values (NULL, '$q', $uid, $current_date ) ";  
+    $sql = "insert into ForumTopic values (NULL, '$t', $current_date, '$u' ) ";  
     $result = mysqli_query($conn, $sql);
-    return $result;        
+    return $result;    
+}
+
+function insertNewForumText ($p, $t, $u){
+    global $conn;
+    $topic_id = getTopicId($t, $u); 
+    $current_date = date("Ymd");
+    $sql = "insert into ForumPosts values (NULL, $topic_id, '$p', $current_date, '$u') ";
+    $result = mysqli_query($conn, $sql);
+    return $result;
 }
 
 

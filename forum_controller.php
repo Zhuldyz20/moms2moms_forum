@@ -72,16 +72,12 @@ session_start();
             include('forum_view_startpage.php');
             exit();
 
-        case 'PostAQuestion':
-            $question = $_POST['question'];
+        case 'PostTopic':
             $topic = $_POST['topic'];
-            PostAQuestion($question, getUserId($_SESSION['username']),$topic);
-            if(getUserId($_SESSION['username'])!== -1)
-            {
-              echo "Posted";    }
-            else
-            {
-                echo "Error, Try again";} 
+            $p = $_POST['post_text'];
+            $u = $_SESSION['username'];
+            insertNewTopic($topic, $u);
+            insertNewForumText($p, $topic, $u);
             exit();
 
         case 'SearchQuestions':

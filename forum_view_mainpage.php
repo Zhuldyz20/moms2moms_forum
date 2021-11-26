@@ -83,6 +83,16 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
             padding:20px;
             z-index:999;
         }
+        .modal-window-topic {
+            width:450px; height:500px;
+            border:1px solid black;
+            display:none;
+            background-color:White;
+            position:fixed;
+            top:150px; left:calc(50% - 201px);
+            padding:20px;
+            z-index:999;
+        }
         
 
 
@@ -261,26 +271,26 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
 
 
-<!--
-    <div id='modal-q' class='modal-window'>
-        <h2 style='text-align:center'>Post a question</h2>
 
-    <form id = 'tr5-form' method="POST" action='forum_controller.php'> 
+    <div id='modal-topic' class='modal-window-topic'>
+        <h2 style='text-align:center'>Post a discussion topic</h2>
+
+    <form id = 'discussion-form' method="POST" action='forum_controller.php'> 
 	<input type='hidden' name='page' value='MainPage' >
-        <input type='hidden' name='question' value='post_q'>
-		
-     <input id='e4-question' type='text' name='question' placeholder = 'Question'> <br> 
-     <br><br>
-     <input id='e4-topic' type='text' name='topic' placeholder = 'Topic'> <br> 
-     <br><br>
+    <input type='hidden' name='command' value='PostTopic'>
+         <p><strong>Topic Title:</strong><br>
+  <input type="text" name="topic" size=40 maxlength=150>
+  <P><strong>Post Text:</strong><br>
+  <textarea name="post_text" rows=8 cols=40 wrap=virtual></textarea>
+  <P><input type="submit" name="submit" value="Add Topic"></p>
 
     <input id='e1-cancel' type='button' value='Cancel'>  	 
-	<input id ='e4-submit'class='submit' type='button' value='submit' >
+
 	<input type="reset" value="Reset"> 
 </form>
 
 
-    </div>-->
+    </div>
 
 
 
@@ -349,13 +359,13 @@ window.onclick = function(e) {
   }
 }
      document.getElementById("post_q").addEventListener("click", function() {
-               document.getElementById("modal-q").style.display = "block";
+               document.getElementById("modal-topic").style.display = "block";
     });
 
 
 	document.getElementById("e1-cancel").addEventListener("click", function() {
         
-        document.getElementById("modal-q").style.display = "none";
+        document.getElementById("modal-topic").style.display = "none";
     });
 
 
@@ -373,7 +383,7 @@ window.onclick = function(e) {
 
  
     $('#e4-submit').click(function() {
-        document.getElementById("modal-q").style.display ="none";
+        document.getElementById("modal-topic").style.display ="none";
         var xhttp = new XMLHttpRequest();  
         xhttp.onreadystatechange = function() {  
             if (this.readyState == 4 && this.status == 200) {  
