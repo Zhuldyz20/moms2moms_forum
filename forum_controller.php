@@ -138,6 +138,16 @@ session_start();
             $result = deleteYourPost($qid);
             echo $result;
             exit();
+
+        case 'DisplayNotYourPosts' :
+            $yourPosts = displayNotYourPost($_SESSION['username']);
+            echo json_encode($yourPosts);
+            exit();
+
+        case 'DisplayAllPosts' :
+            $yourPosts = displayAllPosts();
+            echo json_encode($yourPosts);
+            exit();
        
     }
 } 

@@ -160,4 +160,29 @@ function displayAll(){
         
     }
 
+    function displayNotYourPost($u) {
+        global $conn;
+        $sql = "select ForumPosts.Topic_Id, ForumTopic.Title, ForumPosts.Text, ForumPosts.Date, ForumPosts.Post_Owner from ForumPosts INNER JOIN ForumTopic ON ForumPosts.Topic_Id = ForumTopic.Topic_Id where NOT Post_Owner = '$u'";
+        $result = mysqli_query($conn, $sql);
+        
+    $posts = [];
+    while($rows = mysqli_fetch_assoc($result))
+        $posts[] = $rows;
+    return $posts;
+        
+
+    }
+
+    function displayAllPosts() {
+        global $conn;
+        $sql = "select ForumPosts.Topic_Id, ForumTopic.Title, ForumPosts.Text, ForumPosts.Date, ForumPosts.Post_Owner from ForumPosts INNER JOIN ForumTopic ON ForumPosts.Topic_Id = ForumTopic.Topic_Id";
+        $result = mysqli_query($conn, $sql);
+        
+    $posts = [];
+    while($rows = mysqli_fetch_assoc($result))
+        $posts[] = $rows;
+    return $posts;
+
+    }
+
 ?>

@@ -6,6 +6,60 @@
     }
 ?>
 
+<?php
+   //connect to server and select database
+   $conn = mysqli_connect("localhost", "zilyassova", "zilyassova136", "C354_zilyassova");
+       
+
+   //gather the topics
+   $get_topics = "select Topic_Id, Title,
+  Date, Topic_Owner from ForumTopic order by Date desc";
+  $get_topics_res = mysqli_query($conn, $get_topics);
+  if (mysqli_num_rows($get_topics_res) > 0) {
+     //there are no topics, so say so
+     //create the display string
+     $display_block = "
+     <table cellpadding=3 cellspacing=1 border=1>
+     <tr>
+     <th>TOPIC TITLE</th>
+     <th># of POSTS</th>
+     </tr>";
+  
+      while ($topic_info = mysqli_fetch_array($get_topics_res)) {
+         $topic_id = $topic_info['Topic_Id'];
+         $per_page = 6;
+         $topic_title = stripslashes($topic_info['Title']);
+         $topic_create_time = $topic_info['Date'];
+         $topic_owner = stripslashes($topic_info['Topic_Owner']);
+  
+         //get number of posts
+         $get_num_posts = "select count(Post_Id) from ForumPosts
+              where Topic_Id = $topic_id";
+         $get_num_posts_res = mysqli_query($conn, $get_num_posts);
+              
+         $num_posts = mysqli_fetch_array($get_num_posts_res);
+
+         $pages = ceil($num_posts[0] / $per_page);
+  
+         //add to display
+         $display_block .= "
+         <tr>
+         <td><a href=\"showtopic.php?topic_id=$topic_id\">
+         <strong>$topic_title</strong></a><br>
+         Created on $topic_create_time by $topic_owner</td>
+         <td align=center>$pages</td>
+         </tr>";
+      }
+  } 
+  else {
+    $display_block = "<P><em>No topics exist.</em></p>";
+     }
+  
+     //close up the table
+     $display_block .= "</table>";
+  
+  ?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -185,16 +239,23 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 	
         <div id='layout-main-left'>
         <div class = 'buttons' style = 'text-align: center;'>
-<button id='post_q' style=' margin-top:20px ;margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Post a discussion</b></button>
+<button id='post_q' style=' margin-top:20px ;margin-left: 20px; display:inline-block; width:150px; height:75px;'><b>Post a discussion</b></button>
 	
 		<!---->
                 
-<button id='search_q' style='margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Search for a topic</b></button>
+<button id='search_q' style='margin-left: 20px; display:inline-block; width:120px; height:75px;'><b>Search for a topic</b></button>
 
-<button id='delete_q' style='margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Delete your discussions</b></button>
+<button id='delete_q' style='margin-left: 20px; display:inline-block; width:120px; height:75px;'><b>Delete your discussions</b></button>
+
+<button id='report_q' style='margin-left: 20px; display:inline-block; width:120px; height:75px;'><b>Report some discussions</b></button>
+
+<button id='display-topics' style='margin-left: 20px; display:inline-block; width:120px; height:75px;'><b>Show the topics</b></button>
 
 </div>
-        <div id = 'e3-result-pane'> Results here </div>
+        <div id = 'e3-result-pane'> 
+        <h1>Topics in My Forum</h1>
+            <?php print $display_block; ?>
+        </div>
         <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
 		<input type='hidden' name='page' value='MainPage'>
         	<input type='hidden' name='command' value='SignOut'>
@@ -318,7 +379,19 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
     </div>
 
+    <div id='modal-reply' class='modal-window'>
+        <h2 style='text-align:center'>Reply to <?php echo $_SESSION['']; ?></h2>
 
+    <form method="POST" action='forum_controller.php'> 
+  <input id='e3-question' type='text' name='term' placeholder = 'Question'><br> 
+     <br><br>		
+        <input id='e2-cancel' type='button' value='Cancel'>  	 
+	<input id ='e3-submit' class='' type='button' value='submit' >
+	<input type="reset" value="Reset">
+  
+</form>
+
+    </div>
 
 
 </body>
@@ -502,9 +575,82 @@ var url = "forum_controller.php";
 });
 
 
+$('#report_q').click(function(){
+
+  
+var url = "forum_controller.php"; 
+var query = {page: "MainPage", command: "DisplayNotYourPosts" };
+
+$.post(url, query, function(data) {
+  
+   var rows = JSON.parse(data);  
+                              
+    var t = "<table>";
+        t += "<tr>";
+        for (var p in rows[0])  
+                    t += "<th>" + p + "</th>";
+        t += "</tr>";
+        for (var i = 0; i < rows.length; i++) { 
+            t += "<tr>";
+                for (var p in rows[i])  
+                    t += "<td>" + rows[i][p] + "</td>";  
+                t += "<td>";
+                    t += "<button class = 'report' type='button' data-q-id='" + rows[i]['Topic_Id']  + "'>Report</button>"; 
+                t += "</td>";
+            t += "</tr>";
+        }
+    t += "</table>";
+    $('#e3-result-pane').html(t);
+
+    
+    $('.report').click(function() { 
+        $(this).parent().parent().remove();
+       
+      $('#e3-result-pane').html(this.responseText);
+               
+             
+    });
+});
+});
 
         
+$('#display-topics').click(function(){
 
+  
+var url = "forum_controller.php"; 
+var query = {page: "MainPage", command: "DisplayAllPosts" };
+
+$.post(url, query, function(data) {
+  
+   var rows = JSON.parse(data);  
+                              
+    var t = "<table>";
+        t += "<tr>";
+        for (var p in rows[0])  
+                    t += "<th>" + p + "</th>";
+        t += "</tr>";
+        for (var i = 0; i < rows.length; i++) { 
+            t += "<tr>";
+                for (var p in rows[i])  
+                    t += "<td>" + rows[i][p] + "</td>";  
+                t += "<td>";
+                    t += "<button class = 'reply' type='button' data-q-id='" + rows[i]['Topic_Id']  + "'>Reply</button>"; 
+                t += "</td>";
+            t += "</tr>";
+        }
+    t += "</table>";
+    $('#e3-result-pane').html(t);
+
+    
+    $('.reply').click(function() { 
+        $(this).parent().parent().remove();
+       
+      $('#e3-result-pane').html(this.responseText);
+               
+             
+    });
+});
+});
 
 
     </script>
