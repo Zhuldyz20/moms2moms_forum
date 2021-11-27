@@ -74,11 +74,15 @@ session_start();
 
         case 'PostTopic':
             $topic = $_POST['topic'];
-            $p = $_POST['post_text'];
+            $p = $_POST['post-text'];
             $u = $_SESSION['username'];
             insertNewTopic($topic, $u);
             insertNewForumText($p, $topic, $u);
+        
+             echo "Posted - " . $topic . " ". $p;
+            
             exit();
+            break;
 
         case 'SearchQuestions':
             
@@ -86,6 +90,8 @@ session_start();
             exit();
         
         case 'DeleteProfile' :
+           
+           
             if (deleteProfile($_POST['username'], $_POST['password'])) 
             {
                 
@@ -121,6 +127,17 @@ session_start();
                 exit();
 
             }
+
+        case 'DisplayYourPosts' :
+            $yourPosts = displayYourPost($_SESSION['username']);
+            echo json_encode($yourPosts);
+            exit();
+            
+        case 'DeleteYourPosts' :
+            $qid = $_POST['qid'];
+            $result = deleteQuestion($qid);
+            echo $result;
+            exit();
        
     }
 } 

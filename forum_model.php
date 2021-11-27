@@ -73,7 +73,7 @@ function  insertNewTopic($t, $u){
     $current_date = date("Ymd"); 
     $sql = "insert into ForumTopic values (NULL, '$t', $current_date, '$u' ) ";  
     $result = mysqli_query($conn, $sql);
-    return $result;    
+    return $result;   
 }
 
 function insertNewForumText ($p, $t, $u){
@@ -82,13 +82,14 @@ function insertNewForumText ($p, $t, $u){
     $current_date = date("Ymd");
     $sql = "insert into ForumPosts values (NULL, $topic_id, '$p', $current_date, '$u') ";
     $result = mysqli_query($conn, $sql);
-    return $result;
+      return $result;
+
 }
 
 
 function SearchQuestions($term){
     global $conn;
-    $sql = "select Topic from ForumQuestions where Topic like '%$term%'";  // where Question is like 
+    $sql = "select ForumPosts.Topic_Id, ForumTopic.Title, ForumPosts.Text, ForumPosts.Date, ForumPosts.Post_Owner from ForumPosts INNER JOIN ForumTopic ON ForumPosts.Topic_Id = ForumTopic.Topic_Id where Title like '%$term%'";  // where Question is like 
     $result = mysqli_query($conn, $sql);
     $data = [];
     while ($row = mysqli_fetch_assoc($result))
@@ -97,7 +98,6 @@ function SearchQuestions($term){
 
 
 }
-
 function deleteProfile($u, $p){
     global $conn;
     $sql = "delete from ForumUsers where Username = '$u' and Password = '$p'";
@@ -125,5 +125,33 @@ function editProfile ($u, $p, $e){
 
     }
 }
+
+function displayAll(){
+    global $conn;
+        
+        $sql = "SELECT * FROM ForumPosts" ;
+        $result = mysqli_query($conn, $sql);
+        if (mysqli_num_rows($result) > 0)
+            return true;
+        else
+            return false;
+    
+    }
+
+
+    function displayYourPost($u) {
+        global $conn;
+        $sql = "select ForumPosts.Topic_Id, ForumTopic.Title, ForumPosts.Text, ForumPosts.Date, ForumPosts.Post_Owner from ForumPosts INNER JOIN ForumTopic ON ForumPosts.Topic_Id = ForumTopic.Topic_Id where Post_Owner = '$u'";
+        $result = mysqli_query($conn, $sql);
+        return $result;
+    
+    }
+
+    function deleteYourPost($qid){
+        global $conn;
+        $sql = "delete from ForumTopic where Topic_Id = '$qid'";
+        $result = mysqli_query($conn, $sql);
+        return $result;  
+    }
 
 ?>

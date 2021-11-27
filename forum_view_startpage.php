@@ -3,6 +3,10 @@
 <head>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
 
         #menu-register, #menu-signin{
@@ -77,12 +81,33 @@
        left: 50%;
        transform: translate(-50%, -50%);
 }
-        
+#tableDisplay {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#tableDisplay td, #tableDisplay th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+
+#tableDisplay tr:hover {
+background-color: #ddd;
+}
+
+#tableDisplay th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04AA6D;
+  color: white;
+}      
 
 </style>
 
 
-
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
@@ -148,18 +173,58 @@
 <div id='layout-main'>
 	
         <div id='layout-main-left'>
-            <div id='content-left' style='position:absolute'>
+            
+            <table id = "tableDisplay">
+              <tr>
+    <th>Topic ID</th>
+    <th>Title</th>
+    <th>Discussion post</th>
+    <th>Date</th>
+    <th>Post Owner</th>
+
+  </tr>
+
+ 
+<?php
+
+include "display.php";
+$result = mysqli_query($conn,"select ForumPosts.Topic_Id, ForumTopic.Title, ForumPosts.Text, ForumPosts.Date, ForumPosts.Post_Owner from ForumPosts INNER JOIN ForumTopic ON ForumPosts.Topic_Id = ForumTopic.Topic_Id"); 
+while($data = mysqli_fetch_array($result))
+{
+?>
+  <tr>
+    <td><?php echo $data['Topic_Id']; ?></td>
+    <td><?php echo $data['Title']; ?></td>
+    <td><?php echo $data['Text']; ?></td>
+    <td><?php echo $data['Date']; ?></td>
+    <td><?php echo $data['Post_Owner']; ?></td>
+
+  </tr>	
+<?php
+}
+?>
+</table>
+<div class = "button">
+<button id='post_question' style='font-size: 16px; margin-left:0px; font-weight: lighter;  width:100px; height:40px; border: 1px solid #4CAF50; border-radius: 5px; color: #4CAF50 ; background-color: white;'><b>Post</b></button>
+</div>
 
             <h1 style='margin-left: 50px;'>Content1 </h1>
                 <br>
-            </div>
+           
         </div>
 		
         <div id='layout-main-right'>
 
         	<div id = 'layout-main-right-top'>
                  
-                  <h2 style='margin-left: 50px'>Content2 </h2>
+                  <h2 style='margin-left: 50px'>Useful links</h2>
+
+                 <ul>
+                 <li><a href="https://www.whattoexpect.com/due-date-calculator/" target="_blank">Pregnancy Calculator</a></li>
+                 <li><a href="https://iamnotalone.ca/" target="_blank">Pregnancy Care Center</a></li>
+                 <li><a href="https://www.plannedparenthood.org/learn/pregnancy/pregnancy-tests">Pregnancy Test</a></li>
+
+                 </ul>
                   <h3 style='margin-left: 50px'>Trending disscusion posts</h3>
                   
 
@@ -314,4 +379,14 @@ function showSlides() {
         document.getElementById("modal-signup").style.display = "none";
         delete_error_messages();
     });
+
+    document.getElementById("post_question").addEventListener("click", function() {
+      alert("Sign In is required!");     
+       });
+
+
+
+
+
+
     </script>

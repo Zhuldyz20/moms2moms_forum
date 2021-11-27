@@ -1,3 +1,11 @@
+<?php
+    if (empty($_SESSION['signedin'])) {
+        $display_modal_window = 'none';
+        include('forum_view_startpage.php');
+        exit;
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,9 +13,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  
 <style>
 
 .bg-custom-1 {
@@ -100,8 +109,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
 </style>
 
-   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.1.1.min.js"></script>
-
+  
 
 </head>
 
@@ -184,7 +192,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 <button id='search_q' style='margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Search for a topic</b></button>
 
 </div>
-        <div id = 'e3-result-pane'>  </div>
+        <div id = 'e3-result-pane'> Results here </div>
         <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
 		<input type='hidden' name='page' value='MainPage'>
         	<input type='hidden' name='command' value='SignOut'>
@@ -279,10 +287,10 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 	<input type='hidden' name='page' value='MainPage' >
     <input type='hidden' name='command' value='PostTopic'>
          <p><strong>Topic Title:</strong><br>
-  <input type="text" name="topic" size=40 maxlength=150>
+  <input id= 'topic-title' type='text'  name='topic' size=40 maxlength=150>
   <P><strong>Post Text:</strong><br>
-  <textarea name="post_text" rows=8 cols=40 wrap=virtual></textarea>
-  <P><input type="submit" name="submit" value="Add Topic"></p>
+  <textarea id = 'text-post' name='post-text' rows=8 cols=40 wrap=virtual></textarea>
+  <P><input id = 'add-topic' type='button' value='Submit'></p>
 
     <input id='e1-cancel' type='button' value='Cancel'>  	 
 
@@ -315,6 +323,32 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 </html>
 
 <script>
+
+$('#post_q').click(function() {
+     
+     $('#modal-topic').show();
+ });
+
+ $("#add-topic").click(function() {
+     var topic = $('#topic-title').val().trim();
+     var text = $('#text-post').val().trim();
+     var xhttp = new XMLHttpRequest();  
+     xhttp.onreadystatechange = function() {  
+         if (this.readyState == 4 && this.status == 200) {  
+             $('#e3-result-pane').html(this.responseText);  
+         }
+     };
+     var controller = "forum_controller.php";  
+     var query="page=MainPage&command=PostTopic&topic=" + topic + "&post-text=" + text;
+     xhttp.open('POST', controller);  
+     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
+     xhttp.send(query);
+    });
+
+ $("#e1-cancel").click(function() {
+     
+     $("#modal-topic").hide();
+ });
 
      document.getElementById('sign_out').addEventListener('click', function() {
        document.getElementById('e1-form').submit();
@@ -350,25 +384,21 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
  
 
 // Close the dropdown if the user clicks outside of it
-window.onclick = function(e) {
+/*window.onclick = function(e) {
   if (!e.target.matches('.dropbtn')) {
   var myDropdown = document.getElementById("myDropdown");
     if (myDropdown.classList.contains('show')) {
       myDropdown.classList.remove('show');
     }
   }
-}
-     document.getElementById("post_q").addEventListener("click", function() {
-               document.getElementById("modal-topic").style.display = "block";
-    });
+}*/
 
 
-	document.getElementById("e1-cancel").addEventListener("click", function() {
-        
-        document.getElementById("modal-topic").style.display = "none";
-    });
+    
 
 
+
+/*
     document.getElementById("search_q").addEventListener("click", function() {
                document.getElementById("modal-q1").style.display = "block";
     });
@@ -377,27 +407,11 @@ window.onclick = function(e) {
 	document.getElementById("e2-cancel").addEventListener("click", function() {
         
         document.getElementById("modal-q1").style.display = "none";
-    });
+    });*/
 
 
-
- 
-    $('#e4-submit').click(function() {
-        document.getElementById("modal-topic").style.display ="none";
-        var xhttp = new XMLHttpRequest();  
-        xhttp.onreadystatechange = function() {  
-            if (this.readyState == 4 && this.status == 200) {  
-                $('#e3-result-pane').html(this.responseText);  
-            }
-        };
-        var controller = "forum_controller.php";
-        var query="page=MainPage&command=PostAQuestion" + "&" + "question= " + $("#e4-question").val().trim() + "&" + "topic= " + $("#e4-topic").val().trim();
-
-        xhttp.open("post", controller);  
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
-        xhttp.send(query);
-    });
-
+    
+/*
 
 $("#e3-submit").click(function() {
         var url = "forum_controller.php";
@@ -424,16 +438,10 @@ $("#e3-submit").click(function() {
 
                
 });        
-};
-};
+});
+});*/
         
 
-var url = "forum_controller.php";
-        xhttp.open('POST', url);  
-        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-        xhttp.send(query);
-           
 
-    });
 
     </script>
