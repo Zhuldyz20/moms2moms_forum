@@ -480,7 +480,7 @@ var url = "forum_controller.php";
                     for (var p in rows[i])  
                         t += "<td>" + rows[i][p] + "</td>";  
                     t += "<td>";
-                        t += "<button class = 'delete' type='button' data-q-id='" + rows[i]['Post_Id']  + "'>Delete</button>"; 
+                        t += "<button class = 'delete' type='button' data-q-id='" + rows[i]['Topic_Id']  + "'>Delete</button>"; 
                     t += "</td>";
                 t += "</tr>";
             }
@@ -491,7 +491,7 @@ var url = "forum_controller.php";
         $('.delete').click(function() { 
             $(this).parent().parent().remove();
             var url = "forum_controller.php";
-            var query = {page: "MainPage", command: "DeleteQuestion", topic_id: $(this).attr('data-q-id')};
+            var query = {page: "MainPage", command: "DeleteQuestion", qid: $(this).attr('data-q-id')};
             $.post(url, query,function(data) {
 
                     $('#e3-result-pane').html(this.responseText);

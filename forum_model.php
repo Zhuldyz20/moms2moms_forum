@@ -149,16 +149,15 @@ function displayAll(){
         $posts[] = $rows;
     return $posts;
         
-    
-    
-    
+
     }
 
     function deleteYourPost($qid){
         global $conn;
-        $sql = "delete from ForumTopic where Topic_Id = '$qid'";
+        $sql = "delete ForumTopic, ForumPosts from ForumTopic LEFT JOIN ForumPosts ON (ForumPosts.Topic_Id = ForumTopic.Topic_id) where ForumTopic.Topic_Id = '$qid'";
         $result = mysqli_query($conn, $sql);
-        return $result;  
+        return $result; 
+        
     }
 
 ?>

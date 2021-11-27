@@ -133,9 +133,9 @@ session_start();
             echo json_encode($yourPosts);
             exit();
             
-        case 'DeleteYourPosts' :
+        case 'DeleteQuestion' :
             $qid = $_POST['qid'];
-            $result = deleteQuestion($qid);
+            $result = deleteYourPost($qid);
             echo $result;
             exit();
        
