@@ -191,6 +191,8 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
                 
 <button id='search_q' style='margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Search for a topic</b></button>
 
+<button id='delete_q' style='margin-left: 20px; display:inling-block; width:150px; height:75px;'><b>Delete your discussions</b></button>
+
 </div>
         <div id = 'e3-result-pane'> Results here </div>
         <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
@@ -303,7 +305,7 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 
 
     <div id='modal-q1' class='modal-window'>
-        <h2 style='text-align:center'>Search a question</h2>
+        <h2 style='text-align:center'>Search a discussion</h2>
 
     <form method="POST" action='forum_controller.php'> 
   <input id='e3-question' type='text' name='term' placeholder = 'Question'><br> 
@@ -349,6 +351,54 @@ $('#post_q').click(function() {
      
      $("#modal-topic").hide();
  });
+ $('#search_q').click(function() {
+     
+     $('#modal-q1').show();
+ });
+ $("#e3-submit").click(function() {
+        var url = "forum_controller.php";
+        var term = $('#e3-question').val().trim();
+        document.getElementById("modal-q1").style.display ="none";
+
+        var query="page=MainPage&command=SearchQuestions&term=" + term;
+         
+        var xhttp = new XMLHttpRequest();  
+        xhttp.onreadystatechange = function() { 
+            if (this.readyState == 4 && this.status == 200) {
+              $.post(url, query, function(data)  {
+        var rows = JSON.parse(data);   
+             var t = '<table border = "1">';
+            t += "<tr>";
+            for (var p in rows[0])  
+                        t += "<th>" + p + "</th>";
+            t += "</tr>";
+
+            for (var i = 0; i < rows.length; i++) {  
+                t += '<tr>';
+                for (var p in rows[i])  
+                    t += '<td>' + (rows[i])[p]  + '</td>';    
+                t += "<td>";
+                        t += "  <button name='count' type='button' data-q-id='" + rows[i]['Id']   + "'>Like</button>";  
+                    t += "</td>";
+                t += "</tr>";
+
+            }
+        t += '</table>';
+        $('#e3-result-pane').html(t);
+
+             
+});        
+};
+};
+        
+
+var url = "forum_controller.php";
+        xhttp.open('POST', url);  
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.send(query);
+           
+
+    });
 
      document.getElementById('sign_out').addEventListener('click', function() {
        document.getElementById('e1-form').submit();
@@ -398,7 +448,7 @@ $('#post_q').click(function() {
 
 
 
-/*
+
     document.getElementById("search_q").addEventListener("click", function() {
                document.getElementById("modal-q1").style.display = "block";
     });
@@ -407,39 +457,13 @@ $('#post_q').click(function() {
 	document.getElementById("e2-cancel").addEventListener("click", function() {
         
         document.getElementById("modal-q1").style.display = "none";
-    });*/
+    });
 
 
     
-/*
 
-$("#e3-submit").click(function() {
-        var url = "forum_controller.php";
-        var term = $('#e3-question').val().trim();
-        var query="page=MainPage&command=SearchQuestions&term=" + term;
-        var xhttp = new XMLHttpRequest();  
-        xhttp.onreadystatechange = function() { 
-            if (this.readyState == 4 && this.status == 200) {
-               $.post(url, query, function(data)  {
-               var rows = JSON.parse(data);   
-               var t = '<table>';
-               t += "<tr>";
-               for (var p in rows[0])  
-                 t += "<th>" + p + "</th>";
-               t += "</tr>";
-               for (var i = 0; i < rows.length; i++) {  
-                  t += '<tr>';
-                  for (var p in rows[i])  
-                    t += '<td>' + (rows[i])[p]  + '</td>';    
-                  t += "<td>";
-                  t += "</tr>";}
-        t += '</table>';
-        $('#e3-result-pane').html(t);
 
-               
-});        
-});
-});*/
+
         
 
 
