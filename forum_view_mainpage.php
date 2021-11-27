@@ -460,7 +460,46 @@ var url = "forum_controller.php";
     });
 
 
-    
+    $('#delete_q').click(function(){
+
+  
+    var url = "forum_controller.php"; 
+    var query = {page: "MainPage", command: "DisplayYourPosts" };
+   
+    $.post(url, query, function(data) {
+      
+       var rows = JSON.parse(data);  
+                                  
+        var t = "<table>";
+            t += "<tr>";
+            for (var p in rows[0])  
+                        t += "<th>" + p + "</th>";
+            t += "</tr>";
+            for (var i = 0; i < rows.length; i++) { 
+                t += "<tr>";
+                    for (var p in rows[i])  
+                        t += "<td>" + rows[i][p] + "</td>";  
+                    t += "<td>";
+                        t += "<button class = 'delete' type='button' data-q-id='" + rows[i]['Post_Id']  + "'>Delete</button>"; 
+                    t += "</td>";
+                t += "</tr>";
+            }
+        t += "</table>";
+        $('#e3-result-pane').html(t);
+ 
+        
+        $('.delete').click(function() { 
+            $(this).parent().parent().remove();
+            var url = "forum_controller.php";
+            var query = {page: "MainPage", command: "DeleteQuestion", topic_id: $(this).attr('data-q-id')};
+            $.post(url, query,function(data) {
+
+                    $('#e3-result-pane').html(this.responseText);
+                   
+                 });
+        });
+    });
+});
 
 
 
