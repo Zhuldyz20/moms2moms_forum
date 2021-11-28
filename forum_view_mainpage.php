@@ -4,9 +4,11 @@
         include('forum_view_startpage.php');
         exit;
     }
+    
 ?>
 
-<?php
+<!--<?php
+/* 
    //connect to server and select database
    $conn = mysqli_connect("localhost", "zilyassova", "zilyassova136", "C354_zilyassova");
        
@@ -16,8 +18,7 @@
   Date, Topic_Owner from ForumTopic order by Date desc";
   $get_topics_res = mysqli_query($conn, $get_topics);
   if (mysqli_num_rows($get_topics_res) > 0) {
-     //there are no topics, so say so
-     //create the display string
+    
      $display_block = "
      <table cellpadding=3 cellspacing=1 border=1>
      <tr>
@@ -57,8 +58,8 @@
   
      //close up the table
      $display_block .= "</table>";
-  
-  ?>
+  */
+  ?> -->
 
 <!DOCTYPE html>
 <html>
@@ -254,7 +255,6 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 </div>
         <div id = 'e3-result-pane'> 
         <h1>Topics in My Forum</h1>
-            <?php print $display_block; ?>
         </div>
         <form id='e1-form' style='display:none' method='post' action='forum_controller.php'>
 		<input type='hidden' name='page' value='MainPage'>
@@ -378,20 +378,22 @@ background-image: linear-gradient(15deg, #13547a 0%, #80d0c7 100%);
 </form>
 
     </div>
-
+<!--
     <div id='modal-reply' class='modal-window'>
-        <h2 style='text-align:center'>Reply to <?php echo $_SESSION['']; ?></h2>
+        <h2 style='text-align:center'>Reply to <?echo $_POST['rid']?></h2>
 
     <form method="POST" action='forum_controller.php'> 
-  <input id='e3-question' type='text' name='term' placeholder = 'Question'><br> 
+    <input type='hidden' name='page' value='MainPage' >
+    <input type='hidden' name='command' value='ReplyPost'>
+  <input id='e5-reply' type='text' name='reply' placeholder = 'Question'><br> 
      <br><br>		
-        <input id='e2-cancel' type='button' value='Cancel'>  	 
-	<input id ='e3-submit' class='' type='button' value='submit' >
+        <input id='e5-cancel' type='button' value='Cancel'>  	 
+	<input id ='e5-submit' class='' type='button' value='submit' >
 	<input type="reset" value="Reset">
   
-</form>
+</form> 
 
-    </div>
+    </div>-->
 
 
 </body>
@@ -531,6 +533,7 @@ var url = "forum_controller.php";
         
         document.getElementById("modal-q1").style.display = "none";
     });
+    
 
 
     $('#delete_q').click(function(){
@@ -634,7 +637,10 @@ $.post(url, query, function(data) {
                 for (var p in rows[i])  
                     t += "<td>" + rows[i][p] + "</td>";  
                 t += "<td>";
-                    t += "<button class = 'reply' type='button' data-q-id='" + rows[i]['Topic_Id']  + "'>Reply</button>"; 
+                    t += "<input id = 'e5-reply' name = 'reply' type = 'text' data-r-id='"  + rows[i]['Topic_Id'] + ">";
+                    t += "</td>";
+                t += "<td>";
+                    t += "<button class = 'reply' type='button' data-q-id='" + rows[i][t]  + "'>Reply</button>"; 
                 t += "</td>";
             t += "</tr>";
         }
@@ -643,14 +649,26 @@ $.post(url, query, function(data) {
 
     
     $('.reply').click(function() { 
-        $(this).parent().parent().remove();
-       
-      $('#e3-result-pane').html(this.responseText);
-               
-             
+    var reply = $('#e5-reply').val().trim();
+     var tid = rows['Topic_Id'];
+     var url = "forum_controller.php";
+    var query = {page: "MainPage", command: "PostReply", tid: rows['Topic_Id']};
+     var xhttp = new XMLHttpRequest();  
+     xhttp.onreadystatechange = function() {  
+         if (this.readyState == 4 && this.status == 200) {  
+             $('#e3-result-pane').html(this.responseText);  
+         }
+     };
+     var controller = "forum_controller.php";  
+     var query="page=MainPage&command=ReplyPost&tid=" + reply;
+     xhttp.open('POST', controller);  
+     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");  
+     xhttp.send(query);
     });
+    
 });
 });
+
 
 
     </script>

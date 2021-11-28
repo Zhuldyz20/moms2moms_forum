@@ -19,6 +19,7 @@ if ($_POST['page'] == 'StartPage')
         case 'SignIn':  // With username and password
             if (isUserValid($username, $password)) {
                 session_start();
+                $_SESSION['username'] = 'Root';
                 $_SESSION['signedin'] = 'YES';
                 $_SESSION['username'] = $username;
                 include('forum_view_mainpage.php');
@@ -145,11 +146,23 @@ session_start();
             exit();
 
         case 'DisplayAllPosts' :
-            $yourPosts = displayAllPosts();
+            $yourPosts = displayTopics();
             echo json_encode($yourPosts);
             exit();
-       
+
+        case 'ReplyPost':
+            $t = $_POST['tid'];
+            $r = $_POST['reply'];
+            $u = $_SESSION['username'];
+            AddReply($t, $r, $u);
+            echo "Posted - " . $r;
+            exit();
+
+
     }
+
+  
+
 } 
 
 

@@ -185,4 +185,42 @@ function displayAll(){
 
     }
 
+    function displayTopics(){
+        global $conn;
+        $sql = "select Topic_Id, Title, Date, Topic_Owner from ForumTopic order by Date desc";
+        $result = mysqli_query($conn, $sql);
+        
+            $topics = [];
+            while($rows = mysqli_fetch_assoc($result)){
+                
+              $topics[] = $rows;
+            }
+            return $topics;
+        
+
+    }
+
+   function AddReply($t, $r, $u) {
+    global $conn; 
+    $current_date = date("Ymd");
+    $sql = "insert into ForumReply values (NULL, '$t', '$r', $current_date, '$u') ";
+    $result = mysqli_query($conn, $sql);
+      return $result;
+   }
+
+   function getTopicIDShow(){
+    global $conn;
+    $sql = "select Topic_Id, Title, Date, Topic_Owner from ForumTopic order by Date desc";
+    $result = mysqli_query($conn, $sql);
+    
+        
+        while($rows = mysqli_fetch_assoc($result)){
+            
+          $t = $rows['Topic_Id'];
+        }
+        return $t;
+    
+
+}
+
 ?>
